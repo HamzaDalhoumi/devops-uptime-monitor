@@ -1,0 +1,60 @@
+<div class="container">
+  <h1>{{ title }}</h1>
+
+  <section class="add-service">
+    <h2>Add a service to monitor</h2>
+
+    <div class="form-row">
+      <input
+        type="text"
+        placeholder="Service name"
+        [(ngModel)]="newName"
+      />
+      <input
+        type="text"
+        placeholder="Service URL (https://...)"
+        [(ngModel)]="newUrl"
+      />
+      <button (click)="addService()" [disabled]="creatingService">
+        {{ creatingService ? 'Adding...' : 'Add service' }}
+      </button>
+    </div>
+  </section>
+
+  <section class="services-list">
+    <h2>Monitored services</h2>
+
+    <p *ngIf="loadingServices">Loading services...</p>
+
+    <table *ngIf="services.length > 0; else noServices">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>URL</th>
+          <th>Status</th>
+          <th>Last checked</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of services">
+          <td>{{ s.id }}</td>
+          <td>{{ s.name }}</td>
+          <td>{{ s.url }}</td>
+          <td [ngClass]="s.status.toLowerCase()">
+            {{ s.status }}
+          </td>
+          <td>{{ s.lastCheckedAt || '-' }}</td>
+          <td>
+            <button (click)="check(s)">Check now</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #noServices>
+      <p>No services yet. Add one above 👆</p>
+    </ng-template>
+  </section>
+</div>
